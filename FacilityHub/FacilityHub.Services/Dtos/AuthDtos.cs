@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using FacilityHub.Core.Enums;
 
 namespace FacilityHub.Services.Dtos;
 
@@ -26,3 +27,28 @@ namespace FacilityHub.Services.Dtos;
         IList<string> Roles,
         IList<string> Permissions  // e.g., ["facilities.read", "workorders.write"]
     );
+
+    public class RegisterDto
+    {
+        [Required, MaxLength(50)]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Required, MaxLength(50)]
+        public string LastName { get; set; } = string.Empty;
+
+        [Required, EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        [Required, DataType(DataType.Password)]
+        public string Password { get; set; } = string.Empty;
+
+        [Required, DataType(DataType.Password), Compare("Password")]
+        public string ConfirmPassword { get; set; } = string.Empty;
+
+        public string? AvatarUrl { get; set; }
+
+        public UserRole Role { get; set; }
+    }
+
+     
+    

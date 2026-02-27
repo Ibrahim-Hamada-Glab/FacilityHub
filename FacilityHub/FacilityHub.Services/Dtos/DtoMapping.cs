@@ -15,7 +15,18 @@ public  static class DtoMapping
     };
     //TODO: Add Needed Parameters ToAuthReponse
     public static AuthResponse ToAuthResponse(this AppUser user , string token)
-    => new AuthResponse(token , token , DateTime.UtcNow , new UserInfo(
+    => new(token , token , DateTime.UtcNow , new UserInfo(
         user.Id,user.Email , user.FullName , user.AvatarUrl , new List<string>() , new List<string>()));
 
+    public static AppUser ToAppUser(this RegisterDto registerDto) => new()
+    {
+        FirstName = registerDto.FirstName,
+        LastName = registerDto.LastName,
+        Email = registerDto.Email,
+        AvatarUrl = registerDto.AvatarUrl,
+        Role =  registerDto.Role,
+        UserName = registerDto.Email,
+        IsActive = true
+        
+    };
 }

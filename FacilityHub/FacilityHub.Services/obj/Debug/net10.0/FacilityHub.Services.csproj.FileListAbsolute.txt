@@ -13,3 +13,4 @@
 /home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/bin/Debug/net10.0/FacilityHub.Core.pdb
 /home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/obj/Debug/net10.0/FacilityHub.Services.csproj.AssemblyReference.cache
 /home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/obj/Debug/net10.0/Facility.54FF5A32.Up2Date
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/obj/Debug/net10.0/FacilityHub.Services.sourcelink.json

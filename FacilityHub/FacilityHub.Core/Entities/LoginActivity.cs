@@ -15,4 +15,4 @@ public class LoginActivity : BaseEntity
     
     [Required]
     public bool IsSuccess { get; set; }
-}
+}   

@@ -37,6 +37,8 @@ public static class ServiceExtension
                 o.User.RequireUniqueEmail = true;
             })
             .AddEntityFrameworkStores<AppDbContext>()
+            .AddSignInManager<SignInManager<AppUser>>()
+
             .AddDefaultTokenProviders();
 
         services.AddAuthentication(options =>

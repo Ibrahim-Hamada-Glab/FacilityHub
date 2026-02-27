@@ -25,15 +25,14 @@ public class JwtTokenService : ITokenService
 
     public async Task<string> GenerateTokenAsync(AppUser user)
     {
-        var roles = await _userManager.GetRolesAsync(user);
-        var userClaims = new List<Claim>()
+         var userClaims = new List<Claim>()
         {
             new Claim(JwtRegisteredClaimNames.NameId , user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email , user.Email),
             new Claim(JwtRegisteredClaimNames.Name , user.FullName),
             new Claim(JwtRegisteredClaimNames.GivenName , user.FirstName),
             new Claim(JwtRegisteredClaimNames.FamilyName , user.LastName),
-            new Claim(ClaimTypes.Role , roles[0]),
+            new Claim(ClaimTypes.Role , user.Role.ToString()),
           
         };
 

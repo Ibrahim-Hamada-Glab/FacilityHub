@@ -15,3 +15,4 @@
 /home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Infra/obj/Debug/net10.0/FacilityHub.Infra.pdb
 /home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Infra/obj/Debug/net10.0/FacilityHub.Infra.genruntimeconfig.cache
 /home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Infra/obj/Debug/net10.0/ref/FacilityHub.Infra.dll
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Infra/obj/Debug/net10.0/FacilityHub.Infra.sourcelink.json
