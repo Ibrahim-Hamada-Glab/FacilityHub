@@ -1,0 +1,15 @@
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/bin/Debug/net10.0/FacilityHub.Services.deps.json
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/bin/Debug/net10.0/FacilityHub.Services.dll
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/bin/Debug/net10.0/FacilityHub.Services.pdb
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/obj/Debug/net10.0/FacilityHub.Services.GeneratedMSBuildEditorConfig.editorconfig
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/obj/Debug/net10.0/FacilityHub.Services.AssemblyInfoInputs.cache
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/obj/Debug/net10.0/FacilityHub.Services.AssemblyInfo.cs
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/obj/Debug/net10.0/FacilityHub.Services.csproj.CoreCompileInputs.cache
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/obj/Debug/net10.0/FacilityHub.Services.dll
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/obj/Debug/net10.0/refint/FacilityHub.Services.dll
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/obj/Debug/net10.0/FacilityHub.Services.pdb
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/obj/Debug/net10.0/ref/FacilityHub.Services.dll
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/bin/Debug/net10.0/FacilityHub.Core.dll
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/bin/Debug/net10.0/FacilityHub.Core.pdb
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/obj/Debug/net10.0/FacilityHub.Services.csproj.AssemblyReference.cache
+/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub.Services/obj/Debug/net10.0/Facility.54FF5A32.Up2Date

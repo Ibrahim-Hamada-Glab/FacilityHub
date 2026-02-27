@@ -1,0 +1,6 @@
+@FacilityHub_HostAddress = http://localhost:5114
+
+GET {{FacilityHub_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

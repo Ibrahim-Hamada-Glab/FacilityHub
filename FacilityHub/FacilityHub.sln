@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacilityHub", "FacilityHub\FacilityHub.csproj", "{0DE65A98-8EF4-47B0-B806-76EA27677541}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacilityHub.Core", "FacilityHub.Core\FacilityHub.Core.csproj", "{01168820-E02B-4F60-8D48-1EEA8DCE15EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacilityHub.Infra", "FacilityHub.Infra\FacilityHub.Infra.csproj", "{D4A1A47D-70C7-4EE2-A71F-9E1D08240560}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacilityHub.Services", "FacilityHub.Services\FacilityHub.Services.csproj", "{C158D33C-81F2-435D-8BCD-1D5FF4D4D32D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0DE65A98-8EF4-47B0-B806-76EA27677541}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DE65A98-8EF4-47B0-B806-76EA27677541}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DE65A98-8EF4-47B0-B806-76EA27677541}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DE65A98-8EF4-47B0-B806-76EA27677541}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01168820-E02B-4F60-8D48-1EEA8DCE15EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01168820-E02B-4F60-8D48-1EEA8DCE15EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01168820-E02B-4F60-8D48-1EEA8DCE15EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01168820-E02B-4F60-8D48-1EEA8DCE15EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4A1A47D-70C7-4EE2-A71F-9E1D08240560}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A1A47D-70C7-4EE2-A71F-9E1D08240560}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A1A47D-70C7-4EE2-A71F-9E1D08240560}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A1A47D-70C7-4EE2-A71F-9E1D08240560}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C158D33C-81F2-435D-8BCD-1D5FF4D4D32D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C158D33C-81F2-435D-8BCD-1D5FF4D4D32D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C158D33C-81F2-435D-8BCD-1D5FF4D4D32D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C158D33C-81F2-435D-8BCD-1D5FF4D4D32D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
