@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FacilityHub.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d151eee9886a878f6038aeb3391809c000d79df8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ba1471e7694dcda202546117c7c0186568da1389")]
 [assembly: System.Reflection.AssemblyProductAttribute("FacilityHub.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FacilityHub.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

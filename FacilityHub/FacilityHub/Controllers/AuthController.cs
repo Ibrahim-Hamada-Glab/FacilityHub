@@ -1,6 +1,9 @@
+using System.Security.Claims;
+using FacilityHub.helper;
 using FacilityHub.Services;
 using FacilityHub.Services.Dtos;
 using FacilityHub.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FacilityHub.Controllers;
@@ -23,7 +26,7 @@ public class AuthController : Controller
         {
            Ipaddress  = HttpContext.Connection.RemoteIpAddress?.ToString(),
            LoginDto = loginDto,
-           UserAgent = HttpContext.Request.Headers["User-Agent"].ToString(),
+           UserAgent = UserAgentHelper.GetShortUserAgent(HttpContext.Request.Headers["User-Agent"].ToString()),
             
         },  HttpContext.RequestAborted);
         
@@ -40,5 +43,16 @@ public class AuthController : Controller
         
         
         return StatusCode((int)res.StatusCode , res);
+    }
+
+
+    [HttpGet("me")]
+    [Authorize]
+    public async Task<ActionResult<ServiceResult<UserInfo>>> Me()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var me = await _authService.Me(userId, HttpContext.RequestAborted);
+        return StatusCode((int)me.StatusCode , me);
+        
     }
 }

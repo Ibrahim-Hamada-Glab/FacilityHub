@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "+6tqMtqE3rY=",
+  "dgSpecHash": "iJBXILmx57s=",
   "success": true,
   "projectFilePath": "/home/ibrahim/Learn/FacilityHub/FacilityHubBackend/FacilityHub/FacilityHub/FacilityHub.csproj",
   "expectedPackageFiles": [
@@ -55,7 +55,8 @@
     "/home/ibrahim/.nuget/packages/system.identitymodel.tokens.jwt/8.0.1/system.identitymodel.tokens.jwt.8.0.1.nupkg.sha512",
     "/home/ibrahim/.nuget/packages/system.memory.data/8.0.1/system.memory.data.8.0.1.nupkg.sha512",
     "/home/ibrahim/.nuget/packages/system.security.cryptography.pkcs/9.0.4/system.security.cryptography.pkcs.9.0.4.nupkg.sha512",
-    "/home/ibrahim/.nuget/packages/system.security.cryptography.protecteddata/9.0.4/system.security.cryptography.protecteddata.9.0.4.nupkg.sha512"
+    "/home/ibrahim/.nuget/packages/system.security.cryptography.protecteddata/9.0.4/system.security.cryptography.protecteddata.9.0.4.nupkg.sha512",
+    "/home/ibrahim/.nuget/packages/uaparser/3.1.47/uaparser.3.1.47.nupkg.sha512"
   ],
   "logs": []
 }

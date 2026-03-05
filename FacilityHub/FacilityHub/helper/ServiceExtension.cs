@@ -40,7 +40,10 @@ public static class ServiceExtension
             .AddSignInManager<SignInManager<AppUser>>()
 
             .AddDefaultTokenProviders();
-
+          services.AddCors(options =>
+          {
+              options.AddPolicy("AllowAll", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+          });
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

@@ -83,6 +83,19 @@ public class AuthService(
 
     }
 
+    public async Task<ServiceResult<UserInfo>> Me(string userId, CancellationToken cancellationToken)
+    {
+        return await unitOfWork.ExecuteInTransaction(async () =>
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return ServiceResult<UserInfo>.Failed("User not found", "USER_NOT_FOUND", new[] { "User not found" }, HttpStatusCode.NotFound);
+            }
+            return ServiceResult<UserInfo>.Success(new UserInfo(user.Id, user.Email, user.FullName, user.AvatarUrl, new List<string> { user.Role.ToString() }, new List<string>()));
+        }, cancellationToken);
+    }
+
     public async Task<ServiceResult<AuthResponse>> Register(RegisterDto registerDto,
         CancellationToken cancellationToken)
     {
