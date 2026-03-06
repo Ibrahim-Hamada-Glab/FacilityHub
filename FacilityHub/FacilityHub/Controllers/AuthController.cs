@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using FacilityHub.Core.Entities;
 using FacilityHub.helper;
@@ -14,11 +15,13 @@ namespace FacilityHub.Controllers;
 public class AuthController : Controller
 {
     private readonly IAuthService _authService;
+    private readonly IRefreshTokenService _refreshTokenService;
     private readonly ILogger<AuthController> _logger;
 
-    public AuthController(IAuthService authService, ILogger<AuthController> logger)
+    public AuthController(IAuthService authService, IRefreshTokenService refreshTokenService, ILogger<AuthController> logger)
     {
         _authService = authService;
+        _refreshTokenService = refreshTokenService;
         _logger = logger;
     }
 
@@ -31,6 +34,15 @@ public class AuthController : Controller
             LoginDto = loginDto,
             UserAgent = UserAgentHelper.GetShortUserAgent(HttpContext.Request.Headers["User-Agent"].ToString())
         }, HttpContext.RequestAborted);
+
+        if (res.IsSuccess && res.Data != null)
+        {
+          
+            if(res.Data.RefreshToken != null)
+            {
+                SetRefreshToken(res.Data.RefreshToken);
+            }
+        }
 
 
         return StatusCode((int)res.StatusCode, res);
@@ -59,6 +71,8 @@ public class AuthController : Controller
     [HttpPost("refresh-token")]
     public async Task<ActionResult<ServiceResult<AuthResponse>>> RefreshToken(string accessToken)
     {
+
+        var tokenHandler = new JwtSecurityTokenHandler();
         //  var res = await _authService.RefreshToken(accessToken, HttpContext.RequestAborted);
         //  return StatusCode((int)res.StatusCode, res);
         throw new NotImplementedException();

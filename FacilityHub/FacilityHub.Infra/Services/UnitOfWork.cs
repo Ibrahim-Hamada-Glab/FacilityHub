@@ -24,6 +24,13 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<RefreshToken> RefreshTokenRepository { get; }
     public async Task<T> ExecuteInTransaction<T>(Func<Task<T>> action , CancellationToken cancellationToken) where T : class
     {
+        if (_appDbContext.Database.CurrentTransaction != null)
+      {
+          _logger.LogInformation("Re-entrant call detected — joining existing transaction {TransactionId}",
+              _appDbContext.Database.CurrentTransaction.TransactionId);
+          return await action();
+      }
+
         var strategy = _appDbContext.Database.CreateExecutionStrategy();
         return await strategy.ExecuteAsync(async () =>
         {

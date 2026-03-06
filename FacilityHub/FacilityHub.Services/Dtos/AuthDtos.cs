@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using FacilityHub.Core.Entities;
 using FacilityHub.Core.Enums;
 
 namespace FacilityHub.Services.Dtos;
@@ -11,9 +12,10 @@ namespace FacilityHub.Services.Dtos;
         // Tokens
         string AccessToken,
        
-        [property: JsonIgnore] string RefreshToken,
+        [property: JsonIgnore] RefreshToken? RefreshToken,
 
         DateTime ExpiresAt,
+        DateTime RefreshTokenExpiresAt,
 
         // User
         UserInfo User

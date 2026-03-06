@@ -16,29 +16,47 @@ public class RefreshTokenService(
     ITokenService tokenService)
     : IRefreshTokenService
 {
+    #region Private Methods
+
+    private async Task<List<RefreshToken>> GetRefreshTokensAsync(string userId)
+    {
+        var user = await userManager.Users.Include(x => x.RefreshTokens).FirstOrDefaultAsync(x => x.Id == userId);
+        if (user == null)
+            throw new ServiceException($"User {userId} not found",
+                "USER_NOT_FOUND", new[] { $"User {userId} not found" }, HttpStatusCode.NotFound);
+        return user.RefreshTokens.Where(x => x.IsActive).ToList();
+    }
+
+    #endregion
+
     #region Public Methods
-    public async Task<ServiceResult> GenerateTokenAsync(string ipAddress, string userAgent,
+
+    public async Task<ServiceResult<RefreshToken?>> GenerateTokenAsync(string ipAddress, string userAgent,
         CancellationToken cancellationToken)
     {
         try
         {
-            return await unitOfWork.ExecuteInTransaction<ServiceResult>(async () =>
+            return await unitOfWork.ExecuteInTransaction<ServiceResult<RefreshToken?>>(async () =>
             {
                 var newRefreshToken = await tokenService.GenerateRefreshTokenAsync(userAgent, ipAddress);
                 unitOfWork.RefreshTokenRepository.Add(newRefreshToken);
                 await unitOfWork.SaveChangesAsync(cancellationToken);
-                return ServiceResult.Success("Refresh token saved successfully");
+                return ServiceResult<RefreshToken?>.Success(newRefreshToken, "Refresh token saved successfully");
             }, cancellationToken);
         }
-       
+
         catch (Exception ex)
         {
             logger.LogError(ex, "An error occured while generating refresh token", cancellationToken);
-            return ServiceResult.Failed($"An error occured while generating refresh token", "GENERATE_REFRESH_TOKEN_ERROR", new[] { $"An error occured while generating refresh token" }, HttpStatusCode.InternalServerError);
+            return ServiceResult<RefreshToken?>.Failed("An error occured while generating refresh token",
+                "GENERATE_REFRESH_TOKEN_ERROR", new[]
+                {
+                    "An error occured while generating refresh token"
+                }, HttpStatusCode.InternalServerError);
         }
     }
 
- 
+
     public async Task<ServiceResult> RevokeAllAsync(string UserId, CancellationToken cancellationToken)
     {
         try
@@ -93,6 +111,14 @@ public class RefreshTokenService(
                     throw new ServiceException($"Refresh token {token} not found",
                         "REFRESH_TOKEN_NOT_FOUND", new[] { $"Refresh token {token} not found" },
                         HttpStatusCode.NotFound);
+                if (refreshToken.IsRevoked)
+                    throw new ServiceException($"Refresh token {token} is revoked",
+                        "REFRESH_TOKEN_REVOKED", new[] { $"Refresh token {token} is revoked" },
+                        HttpStatusCode.Unauthorized);
+                if (refreshToken.IsUsed)
+                    throw new ServiceException($"Refresh token {token} is used",
+                        "REFRESH_TOKEN_USED", new[] { $"Refresh token {token} is used" },
+                        HttpStatusCode.Unauthorized);
                 refreshToken.IsUsed = true;
                 await unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -116,18 +142,6 @@ public class RefreshTokenService(
                 new[] { $"An error occured while rotating refresh token for user {userId}" },
                 HttpStatusCode.InternalServerError);
         }
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    private async Task<List<RefreshToken>> GetRefreshTokensAsync(string userId)
-    {
-        var user = await userManager.Users.Include(x => x.RefreshTokens).FirstOrDefaultAsync(x => x.Id == userId);
-        if (user == null) throw new ServiceException($"User {userId} not found",
-            "USER_NOT_FOUND", new[] { $"User {userId} not found" }, HttpStatusCode.NotFound);
-        return user.RefreshTokens.Where(x => x.IsActive).ToList();
     }
 
     #endregion

@@ -44,7 +44,7 @@ public class JwtTokenService : ITokenService
          };
     }
 
-    public async Task<string> GenerateTokenAsync(AppUser user)
+    public async Task<(string token, DateTime expiresAt)> GenerateTokenAsync(AppUser user)
     {
          var userClaims = new List<Claim>()
         {
@@ -68,7 +68,7 @@ public class JwtTokenService : ITokenService
             expires: DateTime.UtcNow.AddMinutes(_tokenOptions.AccessTokenExpirationMinutes),
             signingCredentials: credentials
         );
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return (new JwtSecurityTokenHandler().WriteToken(token), DateTime.UtcNow.AddMinutes(_tokenOptions.AccessTokenExpirationMinutes) );
 
      }
 }

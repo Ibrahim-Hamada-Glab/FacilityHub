@@ -1161,7 +1161,9 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
-          "FacilityHub.Core": "1.0.0"
+          "FacilityHub.Core": "1.0.0",
+          "JWT": "11.0.0",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "10.0.3"
         },
         "compile": {
           "bin/placeholder/FacilityHub.Services.dll": {}
