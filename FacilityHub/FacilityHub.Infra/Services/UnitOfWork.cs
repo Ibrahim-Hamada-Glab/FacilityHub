@@ -1,4 +1,4 @@
-using System.Data;
+ 
 using FacilityHub.Core.Contracts;
 using FacilityHub.Core.Entities;
 using FacilityHub.Infra.Repository;
@@ -17,10 +17,11 @@ public class UnitOfWork : IUnitOfWork
         _appDbContext = appDbContext;
         _logger = logger;
         LoginActivityRepository = new GenericRepository<LoginActivity>(_appDbContext);
+        RefreshTokenRepository = new GenericRepository<RefreshToken>(_appDbContext);
     }
 
     public IGenericRepository<LoginActivity> LoginActivityRepository { get; } 
-
+    public IGenericRepository<RefreshToken> RefreshTokenRepository { get; }
     public async Task<T> ExecuteInTransaction<T>(Func<Task<T>> action , CancellationToken cancellationToken) where T : class
     {
         var strategy = _appDbContext.Database.CreateExecutionStrategy();

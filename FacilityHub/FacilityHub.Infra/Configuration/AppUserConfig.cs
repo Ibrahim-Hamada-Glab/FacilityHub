@@ -11,6 +11,9 @@ public class AppUserConfig : IEntityTypeConfiguration<AppUser>
         builder.HasMany(e => e.LoginActivities)
             .WithOne()
             .HasForeignKey(e => e.UserId);
+        builder.HasMany(e => e.RefreshTokens)
+            .WithOne();
+            
         
     }
 }

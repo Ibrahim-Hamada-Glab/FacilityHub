@@ -21,4 +21,5 @@ public class AppUser : IdentityUser
     public string? AvatarUrl { get; set; }
     
     public virtual ICollection<LoginActivity>  LoginActivities { get; set; } =  new List<LoginActivity>();
+    public virtual ICollection<RefreshToken>  RefreshTokens { get; set; } =  new List<RefreshToken>();
 }

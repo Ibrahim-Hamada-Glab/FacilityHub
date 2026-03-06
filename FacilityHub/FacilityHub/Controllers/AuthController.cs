@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using FacilityHub.Core.Entities;
 using FacilityHub.helper;
 using FacilityHub.Services;
 using FacilityHub.Services.Dtos;
@@ -7,12 +8,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FacilityHub.Controllers;
-    [ApiController]
+
+[ApiController]
 [Route("api/v1/[controller]")]
 public class AuthController : Controller
 {
     private readonly IAuthService _authService;
     private readonly ILogger<AuthController> _logger;
+
     public AuthController(IAuthService authService, ILogger<AuthController> logger)
     {
         _authService = authService;
@@ -20,29 +23,27 @@ public class AuthController : Controller
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<ServiceResult<AuthResponse>>> Login( LoginDto loginDto)
+    public async Task<ActionResult<ServiceResult<AuthResponse>>> Login(LoginDto loginDto)
     {
-        var res =await _authService.Login(new LoginContext
+        var res = await _authService.Login(new LoginContext
         {
-           Ipaddress  = HttpContext.Connection.RemoteIpAddress?.ToString(),
-           LoginDto = loginDto,
-           UserAgent = UserAgentHelper.GetShortUserAgent(HttpContext.Request.Headers["User-Agent"].ToString()),
-            
-        },  HttpContext.RequestAborted);
-        
-        
-        return StatusCode((int)res.StatusCode , res);
+            Ipaddress = HttpContext.Connection.RemoteIpAddress?.ToString(),
+            LoginDto = loginDto,
+            UserAgent = UserAgentHelper.GetShortUserAgent(HttpContext.Request.Headers["User-Agent"].ToString())
+        }, HttpContext.RequestAborted);
+
+
+        return StatusCode((int)res.StatusCode, res);
     }
 
 
     [HttpPost("Register")]
     public async Task<IActionResult> Register(RegisterDto registerDto)
     {
+        var res = await _authService.Register(registerDto, HttpContext.RequestAborted);
 
-        var res =await _authService.Register( registerDto,  HttpContext.RequestAborted);
-        
-        
-        return StatusCode((int)res.StatusCode , res);
+
+        return StatusCode((int)res.StatusCode, res);
     }
 
 
@@ -52,7 +53,29 @@ public class AuthController : Controller
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var me = await _authService.Me(userId, HttpContext.RequestAborted);
-        return StatusCode((int)me.StatusCode , me);
-        
+        return StatusCode((int)me.StatusCode, me);
+    }
+
+    [HttpPost("refresh-token")]
+    public async Task<ActionResult<ServiceResult<AuthResponse>>> RefreshToken(string accessToken)
+    {
+        //  var res = await _authService.RefreshToken(accessToken, HttpContext.RequestAborted);
+        //  return StatusCode((int)res.StatusCode, res);
+        throw new NotImplementedException();
+    }
+
+    private void SetRefreshToken(RefreshToken refreshToken)
+    {
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = refreshToken.ExpiresAt,
+            Secure = true,
+            SameSite = SameSiteMode.None,
+            Domain = HttpContext.Request.Host.Value,
+            Path = "/api/v1/auth/refresh-token"
+
+        };
+        Response.Cookies.Append("X-Refresh-Token", refreshToken.Token, cookieOptions);
     }
 }

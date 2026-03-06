@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using JWT;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
+using System.Security.Cryptography;
 
 
 namespace FacilityHub.Services;
@@ -21,6 +22,26 @@ public class JwtTokenService : ITokenService
     {
         _userManager = userManager;
         _tokenOptions = tokenOptions.Value;
+    }
+
+
+    public async Task<RefreshToken> GenerateRefreshTokenAsync(string userAgent, string ipAddress)
+    {
+        var randomNumber = new byte[64];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(randomNumber);
+        }
+        return new RefreshToken
+        {
+            Token = Convert.ToBase64String(randomNumber),
+            ExpiresAt = DateTime.UtcNow.AddDays(_tokenOptions.RefreshTokenExpirationDays),
+            IsRevoked = false,
+            IsUsed = false,
+            UserAgent = userAgent,
+            IpAddress = ipAddress,
+            FamilyId =  Guid.NewGuid().ToString(),
+         };
     }
 
     public async Task<string> GenerateTokenAsync(AppUser user)
