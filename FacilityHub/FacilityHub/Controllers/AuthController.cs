@@ -1,4 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using FacilityHub.Core.Entities;
 using FacilityHub.helper;
@@ -15,10 +14,11 @@ namespace FacilityHub.Controllers;
 public class AuthController : Controller
 {
     private readonly IAuthService _authService;
-    private readonly IRefreshTokenService _refreshTokenService;
     private readonly ILogger<AuthController> _logger;
+    private readonly IRefreshTokenService _refreshTokenService;
 
-    public AuthController(IAuthService authService, IRefreshTokenService refreshTokenService, ILogger<AuthController> logger)
+    public AuthController(IAuthService authService, IRefreshTokenService refreshTokenService,
+        ILogger<AuthController> logger)
     {
         _authService = authService;
         _refreshTokenService = refreshTokenService;
@@ -36,13 +36,8 @@ public class AuthController : Controller
         }, HttpContext.RequestAborted);
 
         if (res.IsSuccess && res.Data != null)
-        {
-          
-            if(res.Data.RefreshToken != null)
-            {
+            if (res.Data.RefreshToken != null)
                 SetRefreshToken(res.Data.RefreshToken);
-            }
-        }
 
 
         return StatusCode((int)res.StatusCode, res);
@@ -69,13 +64,19 @@ public class AuthController : Controller
     }
 
     [HttpPost("refresh-token")]
-    public async Task<ActionResult<ServiceResult<AuthResponse>>> RefreshToken(string accessToken)
+    public async Task<ActionResult<ServiceResult<AuthResponse>>> RefreshToken(
+        [FromBody] RefreshTokenRequest RefreshTokenRequest)
     {
+        var res = await _authService.RefreshToken(RefreshTokenRequest.Token,
+            Request.Cookies["X-Refresh-Token"] ?? string.Empty,
+            HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty,
+            UserAgentHelper.GetShortUserAgent(HttpContext.Request.Headers["User-Agent"].ToString() ?? string.Empty),
+            HttpContext.RequestAborted);
+        if (res.IsSuccess && res.Data != null)
+            if (res.Data.RefreshToken != null)
+                SetRefreshToken(res.Data.RefreshToken);
 
-        var tokenHandler = new JwtSecurityTokenHandler();
-        //  var res = await _authService.RefreshToken(accessToken, HttpContext.RequestAborted);
-        //  return StatusCode((int)res.StatusCode, res);
-        throw new NotImplementedException();
+        return StatusCode((int)res.StatusCode, res);
     }
 
     private void SetRefreshToken(RefreshToken refreshToken)
@@ -88,7 +89,6 @@ public class AuthController : Controller
             SameSite = SameSiteMode.None,
             Domain = HttpContext.Request.Host.Value,
             Path = "/api/v1/auth/refresh-token"
-
         };
         Response.Cookies.Append("X-Refresh-Token", refreshToken.Token, cookieOptions);
     }

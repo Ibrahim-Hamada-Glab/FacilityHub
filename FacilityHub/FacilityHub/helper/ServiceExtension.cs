@@ -40,9 +40,13 @@ public static class ServiceExtension
             .AddSignInManager<SignInManager<AppUser>>()
 
             .AddDefaultTokenProviders();
-          services.AddCors(options =>
+
+            var orgigins  = config.GetSection("AllowedOrigins").Get<string[]>() ?? new string[] { "http://localhost:3000" , "http://localhost:4200" , "https://localhost:4200" };
+
+        Console.WriteLine("AllowedOrigins: " + string.Join(", ", orgigins));
+        services.AddCors(options =>
           {
-              options.AddPolicy("AllowAll", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+              options.AddPolicy("AllowAll", builder => builder.WithOrigins(orgigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials());
           });
         services.AddAuthentication(options =>
         {

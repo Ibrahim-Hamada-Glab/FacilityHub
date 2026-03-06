@@ -14,7 +14,8 @@
           "JWT": "11.0.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "10.0.3",
           "Microsoft.AspNetCore.OpenApi": "10.0.3",
-          "Microsoft.EntityFrameworkCore.Design": "10.0.3"
+          "Microsoft.EntityFrameworkCore.Design": "10.0.3",
+          "UAParser": "3.1.47"
         },
         "runtime": {
           "FacilityHub.dll": {}
@@ -803,6 +804,14 @@
           }
         }
       },
+      "UAParser/3.1.47": {
+        "runtime": {
+          "lib/netcoreapp2.0/UAParser.dll": {
+            "assemblyVersion": "3.1.47.0",
+            "fileVersion": "3.1.47.0"
+          }
+        }
+      },
       "FacilityHub.Core/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "10.0.3"
@@ -1182,6 +1191,13 @@
       "sha512": "sha512-o94k2RKuAce3GeDMlUvIXlhVa1kWpJw95E6C9LwW0KlG0nj5+SgCiIxJ2Eroqb9sLtG1mEMbFttZIBZ13EJPvQ==",
       "path": "system.security.cryptography.protecteddata/9.0.4",
       "hashPath": "system.security.cryptography.protecteddata.9.0.4.nupkg.sha512"
+    },
+    "UAParser/3.1.47": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-I68Jl/Vs5RQZdz9BbmYtnXgujg0jVd61LhKbyNZOCm9lBxZFGxLbiQo6yFj21VYi7DzPvEvrVOmeC6v41AoLfw==",
+      "path": "uaparser/3.1.47",
+      "hashPath": "uaparser.3.1.47.nupkg.sha512"
     },
     "FacilityHub.Core/1.0.0": {
       "type": "project",

@@ -6,6 +6,7 @@ using FacilityHub.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace FacilityHub.Services.Services;
 
@@ -18,28 +19,37 @@ public class RefreshTokenService(
 {
     #region Private Methods
 
-    private async Task<List<RefreshToken>> GetRefreshTokensAsync(string userId)
+    private async Task<List<RefreshToken>> GetRefreshTokensAsync(AppUser user)
     {
-        var user = await userManager.Users.Include(x => x.RefreshTokens).FirstOrDefaultAsync(x => x.Id == userId);
-        if (user == null)
-            throw new ServiceException($"User {userId} not found",
-                "USER_NOT_FOUND", new[] { $"User {userId} not found" }, HttpStatusCode.NotFound);
-        return user.RefreshTokens.Where(x => x.IsActive).ToList();
+  
+        logger.LogInformation("Getting refresh tokens for user {userId}", user.Id);
+        var refreshTokens = user.RefreshTokens.Where(x => x.IsActive).ToList();
+        logger.LogInformation("Found {count} active refresh tokens for user {userId}", refreshTokens.Count, user.Id);
+        // print the refresh tokens
+        logger.LogInformation("Refresh tokens: {refreshTokens}", JsonConvert.SerializeObject(refreshTokens));
+        // print the refresh tokens in a readable format
+        logger.LogInformation("Refresh tokens: {refreshTokens}", string.Join(", ", refreshTokens.Select(x => x.Token)));
+        return refreshTokens;
     }
 
     #endregion
 
     #region Public Methods
 
-    public async Task<ServiceResult<RefreshToken?>> GenerateTokenAsync(string ipAddress, string userAgent,
+    public async Task<ServiceResult<RefreshToken?>> GenerateTokenAsync(string ipAddress, string userAgent, string userId,
         CancellationToken cancellationToken)
     {
         try
         {
-            return await unitOfWork.ExecuteInTransaction<ServiceResult<RefreshToken?>>(async () =>
+            return await unitOfWork.ExecuteInTransaction(async () =>
             {
                 var newRefreshToken = await tokenService.GenerateRefreshTokenAsync(userAgent, ipAddress);
                 unitOfWork.RefreshTokenRepository.Add(newRefreshToken);
+                var user = await userManager.Users.Where(x => x.Id == userId).FirstOrDefaultAsync();
+                if (user == null)
+                    throw new ServiceException($"User {userId} not found",
+                        "USER_NOT_FOUND", new[] { $"User {userId} not found" }, HttpStatusCode.NotFound);
+                user.RefreshTokens.Add(newRefreshToken);
                 await unitOfWork.SaveChangesAsync(cancellationToken);
                 return ServiceResult<RefreshToken?>.Success(newRefreshToken, "Refresh token saved successfully");
             }, cancellationToken);
@@ -61,14 +71,20 @@ public class RefreshTokenService(
     {
         try
         {
-            return await unitOfWork.ExecuteInTransaction<ServiceResult>(async () =>
+            return await unitOfWork.ExecuteInTransaction(async () =>
             {
-                var refreshTokens = await GetRefreshTokensAsync(UserId);
+                      var user = await userManager.Users.Where(x => x.Id == UserId).Include(x => x.RefreshTokens)
+            .FirstOrDefaultAsync();
+                if (user == null)
+                    throw new ServiceException($"User {UserId} not found",
+                        "USER_NOT_FOUND", new[] { $"User {UserId} not found" }, HttpStatusCode.NotFound);
+
+                var refreshTokens = await GetRefreshTokensAsync(user);
                 if (refreshTokens.Count == 0)
                 {
-                    logger.LogWarning("No active refresh tokens found for user {userId}", UserId);
-                    throw new ServiceException($"No active refresh tokens found for user {UserId}",
-                        "NO_ACTIVE_REFRESH_TOKENS", new[] { $"No active refresh tokens found for user {UserId}" },
+                    logger.LogWarning("No active refresh tokens found for user {userId}", user.Id);
+                    throw new ServiceException($"No active refresh tokens found for user {user.Id}",
+                        "NO_ACTIVE_REFRESH_TOKENS", new[] { $"No active refresh tokens found for user {user.Id}" },
                         HttpStatusCode.NotFound);
                 }
 
@@ -99,11 +115,16 @@ public class RefreshTokenService(
     {
         try
         {
-            return await unitOfWork.ExecuteInTransaction<ServiceResult<RefreshToken?>>(async () =>
+            return await unitOfWork.ExecuteInTransaction(async () =>
             {
-                var activeRefreshTokens = await GetRefreshTokensAsync(userId);
+                var user = await userManager.Users.Where(x => x.Id == userId).Include(x => x.RefreshTokens)
+            .FirstOrDefaultAsync();
+                if (user == null)
+                    throw new ServiceException($"User {userId} not found",
+                        "USER_NOT_FOUND", new[] { $"User {userId} not found" }, HttpStatusCode.NotFound);
+                var activeRefreshTokens = await GetRefreshTokensAsync(user);
                 if (activeRefreshTokens.Count == 0)
-                    throw new ServiceException("No active refresh tokens found for user {userId}",
+                    throw new ServiceException($"No active refresh tokens found for user {userId}",
                         "NO_ACTIVE_REFRESH_TOKENS", new[] { $"No active refresh tokens found for user {userId}" },
                         HttpStatusCode.NotFound);
                 var refreshToken = activeRefreshTokens.FirstOrDefault(x => x.Token == token);
@@ -120,6 +141,7 @@ public class RefreshTokenService(
                         "REFRESH_TOKEN_USED", new[] { $"Refresh token {token} is used" },
                         HttpStatusCode.Unauthorized);
                 refreshToken.IsUsed = true;
+                user.RefreshTokens.Add(refreshToken);
                 await unitOfWork.SaveChangesAsync(cancellationToken);
 
                 var newRefreshToken = await tokenService.GenerateRefreshTokenAsync(userAgent, ipAddress);

@@ -62,15 +62,17 @@ public class AuthService(
                         "AUTHENTICATION_FAILED", new[] { "The email address or password you entered was incorrect" },
                         HttpStatusCode.Unauthorized);
                 }
-               var newRefreshToken = await refreshTokenService.GenerateTokenAsync(loginDto.Ipaddress ?? string.Empty, loginDto.UserAgent ?? string.Empty, cancellationToken);
-               if (!newRefreshToken.IsSuccess || newRefreshToken.Data == null)
-               {
-                    throw new ServiceException(newRefreshToken.Message, newRefreshToken.ErrorCode, newRefreshToken.Errors, newRefreshToken.StatusCode);
-               }
+
+                var newRefreshToken = await refreshTokenService.GenerateTokenAsync(loginDto.Ipaddress ?? string.Empty,
+                    loginDto.UserAgent ?? string.Empty, user.Id, cancellationToken);
+                if (!newRefreshToken.IsSuccess || newRefreshToken.Data == null)
+                    throw new ServiceException(newRefreshToken.Message, newRefreshToken.ErrorCode,
+                        newRefreshToken.Errors, newRefreshToken.StatusCode);
                 var (token, expiresAt) = await tokenService.GenerateTokenAsync(user);
-                var authResponse = user.ToAuthResponse(token , newRefreshToken.Data, expiresAt, newRefreshToken.Data.ExpiresAt);
+                var authResponse = user.ToAuthResponse(token, newRefreshToken.Data, expiresAt,
+                    newRefreshToken.Data.ExpiresAt);
                 unitOfWork.LoginActivityRepository.Add(loginDto.ToLoginActivity(user.Id, true));
-                await unitOfWork.SaveChangesAsync(cancellationToken);  
+                await unitOfWork.SaveChangesAsync(cancellationToken);
 
                 return ServiceResult<AuthResponse>.Success(authResponse);
             }, cancellationToken);
@@ -101,7 +103,7 @@ public class AuthService(
     {
         try
         {
-            return await unitOfWork.ExecuteInTransaction<ServiceResult<AuthResponse>>(async () =>
+            return await unitOfWork.ExecuteInTransaction(async () =>
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var token = tokenHandler.ReadJwtToken(accessToken);
@@ -114,14 +116,16 @@ public class AuthService(
                 if (user == null)
                     throw new ServiceException("User not found", "USER_NOT_FOUND", new[] { "User not found" },
                         HttpStatusCode.NotFound);
-                var refreshTokenEntity = await refreshTokenService.RotateAsync(refreshToken, userId, ipAddress, userAgent, cancellationToken);
+                var refreshTokenEntity =
+                    await refreshTokenService.RotateAsync(refreshToken, userId, ipAddress, userAgent,
+                        cancellationToken);
                 if (!refreshTokenEntity.IsSuccess || refreshTokenEntity.Data == null)
-                {
-                    throw new ServiceException(refreshTokenEntity.Message, refreshTokenEntity.ErrorCode, refreshTokenEntity.Errors, refreshTokenEntity.StatusCode);
-                }
+                    throw new ServiceException(refreshTokenEntity.Message, refreshTokenEntity.ErrorCode,
+                        refreshTokenEntity.Errors, refreshTokenEntity.StatusCode);
 
                 var (newToken, newTokenExpiresAt) = await tokenService.GenerateTokenAsync(user);
-                var newAuthResponse = user.ToAuthResponse(newToken, refreshTokenEntity.Data, newTokenExpiresAt, refreshTokenEntity.Data.ExpiresAt);
+                var newAuthResponse = user.ToAuthResponse(newToken, refreshTokenEntity.Data, newTokenExpiresAt,
+                    refreshTokenEntity.Data.ExpiresAt);
                 return ServiceResult<AuthResponse>.Success(newAuthResponse);
             }, cancellationToken);
         }
@@ -174,7 +178,8 @@ public class AuthService(
 
                 var (token, expiresAt) = await tokenService.GenerateTokenAsync(user);
                 // TODO: Generate Refresh Token
-                var authResponse = user.ToAuthResponse(token, new RefreshToken(), expiresAt, DateTime.UtcNow.AddDays(7));
+                var authResponse =
+                    user.ToAuthResponse(token, new RefreshToken(), expiresAt, DateTime.UtcNow.AddDays(7));
 
                 logger.LogInformation("User registered successfully: {Email}", registerDto.Email);
                 return ServiceResult<AuthResponse>.Success(authResponse);
