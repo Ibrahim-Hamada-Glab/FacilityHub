@@ -21,7 +21,6 @@ public class RefreshTokenService(
 
     private async Task<List<RefreshToken>> GetRefreshTokensAsync(AppUser user)
     {
-  
         logger.LogInformation("Getting refresh tokens for user {userId}", user.Id);
         var refreshTokens = user.RefreshTokens.Where(x => x.IsActive).ToList();
         logger.LogInformation("Found {count} active refresh tokens for user {userId}", refreshTokens.Count, user.Id);
@@ -36,7 +35,8 @@ public class RefreshTokenService(
 
     #region Public Methods
 
-    public async Task<ServiceResult<RefreshToken?>> GenerateTokenAsync(string ipAddress, string userAgent, string userId,
+    public async Task<ServiceResult<RefreshToken?>> GenerateTokenAsync(string ipAddress, string userAgent,
+        string userId,
         CancellationToken cancellationToken)
     {
         try
@@ -73,8 +73,8 @@ public class RefreshTokenService(
         {
             return await unitOfWork.ExecuteInTransaction(async () =>
             {
-                      var user = await userManager.Users.Where(x => x.Id == UserId).Include(x => x.RefreshTokens)
-            .FirstOrDefaultAsync();
+                var user = await userManager.Users.Where(x => x.Id == UserId).Include(x => x.RefreshTokens)
+                    .FirstOrDefaultAsync();
                 if (user == null)
                     throw new ServiceException($"User {UserId} not found",
                         "USER_NOT_FOUND", new[] { $"User {UserId} not found" }, HttpStatusCode.NotFound);
@@ -118,7 +118,7 @@ public class RefreshTokenService(
             return await unitOfWork.ExecuteInTransaction(async () =>
             {
                 var user = await userManager.Users.Where(x => x.Id == userId).Include(x => x.RefreshTokens)
-            .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync();
                 if (user == null)
                     throw new ServiceException($"User {userId} not found",
                         "USER_NOT_FOUND", new[] { $"User {userId} not found" }, HttpStatusCode.NotFound);
@@ -127,7 +127,9 @@ public class RefreshTokenService(
                     throw new ServiceException($"No active refresh tokens found for user {userId}",
                         "NO_ACTIVE_REFRESH_TOKENS", new[] { $"No active refresh tokens found for user {userId}" },
                         HttpStatusCode.NotFound);
+
                 var refreshToken = activeRefreshTokens.FirstOrDefault(x => x.Token == token);
+                logger.LogInformation("Refresh token: {refreshToken}", JsonConvert.SerializeObject(refreshToken));
                 if (refreshToken == null)
                     throw new ServiceException($"Refresh token {token} not found",
                         "REFRESH_TOKEN_NOT_FOUND", new[] { $"Refresh token {token} not found" },

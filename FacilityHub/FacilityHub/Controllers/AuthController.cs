@@ -79,6 +79,36 @@ public class AuthController : Controller
         return StatusCode((int)res.StatusCode, res);
     }
 
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
+    {
+        var res = await _authService.ForgotPassword(dto, HttpContext.RequestAborted);
+        return StatusCode((int)res.StatusCode, res);
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
+    {
+        var res = await _authService.ResetPassword(dto, HttpContext.RequestAborted);
+        return StatusCode((int)res.StatusCode, res);
+    }
+
+    [HttpPost("verify-email")]
+    public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailDto dto)
+    {
+        var res = await _authService.VerifyEmail(dto, HttpContext.RequestAborted);
+        return StatusCode((int)res.StatusCode, res);
+    }
+
+    [HttpPost("change-password")]
+    [Authorize]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        var res = await _authService.ChangePassword(userId, dto, HttpContext.RequestAborted);
+        return StatusCode((int)res.StatusCode, res);
+    }
+
     private void SetRefreshToken(RefreshToken refreshToken)
     {
         var cookieOptions = new CookieOptions
@@ -87,8 +117,7 @@ public class AuthController : Controller
             Expires = refreshToken.ExpiresAt,
             Secure = true,
             SameSite = SameSiteMode.None,
-            Domain = HttpContext.Request.Host.Value,
-            Path = "/api/v1/auth/refresh-token"
+            Path = "/"
         };
         Response.Cookies.Append("X-Refresh-Token", refreshToken.Token, cookieOptions);
     }

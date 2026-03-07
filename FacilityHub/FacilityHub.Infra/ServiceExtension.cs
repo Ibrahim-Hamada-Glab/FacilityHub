@@ -11,7 +11,8 @@ public static class ServiceExtension
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IGenericRepository<>) ,  typeof(GenericRepository<>));
-        
+        services.AddScoped<IEmailSender, EmailSender>();
+        services.AddScoped<IEmailTemplateService, EmailTemplateService>();
         return services;
     }
 }

@@ -10,6 +10,7 @@ using JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using FacilityHub.Core.helper;
 
 namespace FacilityHub.helper;
 
@@ -18,6 +19,7 @@ public static class ServiceExtension
     public static IServiceCollection AddApiServices(this IServiceCollection services , IConfiguration  config)
     {
         services.Configure<JwtToken>(config.GetSection("Jwt"));
+        services.Configure<EmailConfig>(config.GetSection("Email"));
 
         services.AddDbContext<AppDbContext>(options =>
         {

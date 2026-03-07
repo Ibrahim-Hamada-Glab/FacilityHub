@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify Your Email - FacilityHub</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f6f9;font-family:'Segoe UI',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f6f9;padding:40px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background-color:#1a73e8;padding:32px 40px;text-align:center;">
+              <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:700;letter-spacing:0.5px;">FacilityHub</h1>
+              <p style="margin:6px 0 0;color:#d2e3fc;font-size:13px;">Facility &amp; Equipment Management</p>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:40px 40px 32px;">
+              <h2 style="margin:0 0 12px;color:#202124;font-size:20px;font-weight:600;">Verify your email address</h2>
+              <p style="margin:0 0 8px;color:#5f6368;font-size:15px;line-height:1.6;">Hi <strong>{{Name}}</strong>,</p>
+              <p style="margin:0 0 24px;color:#5f6368;font-size:15px;line-height:1.6;">
+                Welcome to FacilityHub! Please verify your email address to activate your account and get started.
+              </p>
+
+              <!-- CTA Button -->
+              <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+                <tr>
+                  <td style="background-color:#1a73e8;border-radius:6px;">
+                    <a href="{{VerificationLink}}" target="_blank"
+                       style="display:inline-block;padding:14px 32px;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;letter-spacing:0.3px;">
+                      Verify Email Address
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 8px;color:#80868b;font-size:13px;line-height:1.6;">
+                If the button above doesn't work, copy and paste this link into your browser:
+              </p>
+              <p style="margin:0 0 24px;word-break:break-all;">
+                <a href="{{VerificationLink}}" style="color:#1a73e8;font-size:13px;">{{VerificationLink}}</a>
+              </p>
+
+              <p style="margin:0;color:#80868b;font-size:13px;line-height:1.6;">
+                If you didn't create a FacilityHub account, you can safely ignore this email.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color:#f8f9fa;padding:20px 40px;border-top:1px solid #e8eaed;text-align:center;">
+              <p style="margin:0;color:#9aa0a6;font-size:12px;">&copy; {{Year}} FacilityHub. All rights reserved.</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

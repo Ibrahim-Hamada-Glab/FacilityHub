@@ -51,3 +51,28 @@ public class RegisterDto
 
     public UserRole Role { get; set; }
 }
+
+public class ForgotPasswordDto{
+    [EmailAddress][Required] public string Email{ get; set; } = string.Empty;
+}
+
+
+public class ResetPasswordDto{
+    [EmailAddress][Required] public string Email{ get; set; } = string.Empty;
+    [Required] public string Token{ get; set; } = string.Empty;
+    [Required][DataType(DataType.Password)] public string NewPassword{ get; set; } = string.Empty;
+    [Required][DataType(DataType.Password)][Compare("NewPassword")] public string ConfirmNewPassword{ get; set; } = string.Empty;
+}
+
+
+
+public class VerifyEmailDto{
+    [Required] public string UserId{ get; set; } = string.Empty;
+    [Required] public string Token{ get; set; } = string.Empty;
+}
+
+public class ChangePasswordDto{
+    [Required][DataType(DataType.Password)] public string CurrentPassword{ get; set; } = string.Empty;
+    [Required][DataType(DataType.Password)] public string NewPassword{ get; set; } = string.Empty;
+    [Required][DataType(DataType.Password)][Compare("NewPassword")] public string ConfirmNewPassword{ get; set; } = string.Empty;
+}
