@@ -18,10 +18,12 @@ public class UnitOfWork : IUnitOfWork
         _logger = logger;
         LoginActivityRepository = new GenericRepository<LoginActivity>(_appDbContext);
         RefreshTokenRepository = new GenericRepository<RefreshToken>(_appDbContext);
+        FacilityRepository = new GenericRepository<Facility>(_appDbContext);
     }
 
     public IGenericRepository<LoginActivity> LoginActivityRepository { get; } 
     public IGenericRepository<RefreshToken> RefreshTokenRepository { get; }
+    public IGenericRepository<Facility> FacilityRepository { get; }
     public async Task<T> ExecuteInTransaction<T>(Func<Task<T>> action , CancellationToken cancellationToken) where T : class
     {
         if (_appDbContext.Database.CurrentTransaction != null)

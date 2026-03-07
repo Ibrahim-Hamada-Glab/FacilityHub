@@ -25,6 +25,7 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<AppUser>
         builder.Entity<AppUser>().ToTable("Users");
 
         builder.ApplyConfiguration(new AppUserConfig());
+        builder.ApplyConfiguration(new FacilityConfig());
     }
 
     public override int SaveChanges()
