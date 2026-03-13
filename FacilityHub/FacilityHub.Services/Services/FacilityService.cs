@@ -7,11 +7,41 @@ using FacilityHub.Core.Contracts;
 using FacilityHub.Services.Interfaces;
 using System.Net;
 using FacilityHub.Services.helper;
+using FacilityHub.Services.Dtos;
 
 namespace FacilityHub.Services.Services
 {
     public class FacilityService(IUnitOfWork unitOfWork) : IFacilityService
     {
+        public async Task<ServiceResult<FacilityViewDto>> CreateFacilityAsync(CreateFacilityDto dto, string createdById, CancellationToken cancellationToken)
+        {
+            try
+            {
+
+
+                return await unitOfWork.ExecuteInTransaction<ServiceResult<FacilityViewDto>>(async () =>
+                {
+                    
+                     var facility = dto.ToFacility(createdById);
+
+
+                     unitOfWork.FacilityRepository.Add(facility);
+                    await unitOfWork.SaveChangesAsync(cancellationToken);
+                    var facilityViewDto = facility.ToFacilityViewDto();
+
+                    return ServiceResult<FacilityViewDto>.Success(facilityViewDto, "Facility created successfully", HttpStatusCode.Created);
+                }, cancellationToken);
+            }
+            catch (ServiceException ex)
+            {
+                return ServiceResult<FacilityViewDto>.Failed(ex.Message, ex.ErrorCode, ex.Errors, ex.StatusCode);
+            }
+            catch (System.Exception)
+            {
+                return ServiceResult<FacilityViewDto>.Failed("An error occurred while creating facility", "CREATE_FACILITY_ERROR", new string[] { "An error occurred while creating facility" }, HttpStatusCode.InternalServerError);
+            }
+        }
+
         public async Task<ServiceResult<IReadOnlyList<Facility>>> GetAllFacilitiesAsync()
         {
             try

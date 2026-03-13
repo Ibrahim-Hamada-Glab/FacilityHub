@@ -23,7 +23,10 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<AppUser>
         base.OnModelCreating(builder);
               
         builder.Entity<AppUser>().ToTable("Users");
-
+        builder.HasSequence<long>("FacilityCodeNumber")
+                .HasMax(10000000)
+                .StartsAt(1)
+                .IncrementsBy(1);
         builder.ApplyConfiguration(new AppUserConfig());
         builder.ApplyConfiguration(new FacilityConfig());
     }

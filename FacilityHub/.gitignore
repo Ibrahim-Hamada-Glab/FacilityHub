@@ -18,15 +18,7 @@ appsettings
 .env.test.example
 .env.production.example
 
-FacilityHub/obj
-FacilityHub/bin
-FacilityHub.Services/obj
- FacilityHub.Services/bin
-FacilityHub.Core/obj
-FacilityHub.Core/bin
-FacilityHub.Infrastructure/obj
-FacilityHub.Infrastructure/bin
-FacilityHub.Application/obj
-FacilityHub.Application/bin
-FacilityHub.Domain/obj
-FacilityHub.Domain/bin
+**/bin
+**/obj
+**/out
+**/dist

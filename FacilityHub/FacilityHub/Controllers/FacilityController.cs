@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using FacilityHub.Services.Dtos;
 using FacilityHub.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,4 +29,17 @@ public class FacilityController : Controller
         var result = await _facilityService.GetFacilityByIdAsync(id);
         return StatusCode((int)result.StatusCode, result);
     }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateFacility([FromBody] CreateFacilityDto dto)
+    {
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value; 
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized(new { Message = "User is not authenticated." });
+        }
+        var result = await _facilityService.CreateFacilityAsync(dto , userId, HttpContext.RequestAborted);
+        return StatusCode((int)result.StatusCode, result);
+    }
+     
 }
