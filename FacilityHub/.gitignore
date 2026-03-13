@@ -22,3 +22,4 @@ appsettings
 **/obj
 **/out
 **/dist
+.ai/
